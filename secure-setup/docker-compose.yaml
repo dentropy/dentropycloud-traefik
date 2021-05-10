@@ -1,0 +1,45 @@
+version: '2'
+services:
+  traefik:
+    image: traefik:v2.2
+    ports:
+      - "80:80"
+      # The HTTPS port
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # It's a good practice to persist the Letsencrypt certificates so that they don't change if the Traefik container needs to be restarted.
+      - "./letsencrypt:/letsencrypt"
+    command:
+      - --providers.docker
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker.network=traefik-homelab
+      - '--providers.docker.defaultRule=Host(`traefik.${MY_DOMAIN}`)'
+      # We're going to use the DNS challenge since it allows us to generate
+      # certificates for intranet/lan sites as well
+      - "--certificatesresolvers.mydnschallenge.acme.dnschallenge=true"
+      # We're using letsencrypt for this example, but many DNS providers are
+      # supported: https://docs.traefik.io/https/acme/#providers 
+      - --certificatesresolvers.le.acme.email=${MY_EMAIL}
+      - --certificatesresolvers.le.acme.storage=/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+    environment:
+      # We need to provide credentials to our DNS provider.
+      # See https://docs.traefik.io/https/acme/#providers 
+      #- "CF_DNS_API_TOKEN=XXXXXXXXX"
+      #- "CF_ZONE_API_TOKEN=XXXXXXXXXX"
+    networks:
+      - traefik
+
+  hellosvc:
+    image: containous/whoami
+    labels:
+      - traefik.http.routers.hellosvc.entrypoints=websecure
+      - 'traefik.http.routers.hellosvc.tls.certresolver=mydnschallenge'
+    networks:
+      - traefik-homelab
+networks:
+    traefik-homelab:
+        external:
+            name: traefik-homelab
