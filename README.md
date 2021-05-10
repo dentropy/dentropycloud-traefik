@@ -7,6 +7,8 @@ mv env_example .env
 
 vim .env
 
-docker-compose up
+cd secure-setup
+
+docker-compose --env-file ../.env up
 ```
-```
+

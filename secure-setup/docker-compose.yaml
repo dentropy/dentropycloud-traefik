@@ -18,25 +18,25 @@ services:
       - '--providers.docker.defaultRule=Host(`traefik.${MY_DOMAIN}`)'
       # We're going to use the DNS challenge since it allows us to generate
       # certificates for intranet/lan sites as well
-      - "--certificatesresolvers.mydnschallenge.acme.dnschallenge=true"
+      - "--certificatesresolvers.le.acme.dnschallenge=true"
       # We're using letsencrypt for this example, but many DNS providers are
       # supported: https://docs.traefik.io/https/acme/#providers 
       - --certificatesresolvers.le.acme.email=${MY_EMAIL}
       - --certificatesresolvers.le.acme.storage=/acme.json
       - --certificatesresolvers.le.acme.tlschallenge=true
-    environment:
+    #environment:
       # We need to provide credentials to our DNS provider.
       # See https://docs.traefik.io/https/acme/#providers 
       #- "CF_DNS_API_TOKEN=XXXXXXXXX"
       #- "CF_ZONE_API_TOKEN=XXXXXXXXXX"
     networks:
-      - traefik
+      - traefik-homelab
 
   hellosvc:
     image: containous/whoami
     labels:
       - traefik.http.routers.hellosvc.entrypoints=websecure
-      - 'traefik.http.routers.hellosvc.tls.certresolver=mydnschallenge'
+      - 'traefik.http.routers.hellosvc.tls.certresolver=le'
     networks:
       - traefik-homelab
 networks:
