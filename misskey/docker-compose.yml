@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+  misskey-web:
+    container_name: misskey-web
+    image: misskey/misskey
+    restart: always
+    links:
+      - db
+      - redis
+    #  - es
+    ports:
+      - "3000:3000"
+    #expose:
+    #  - "3000"
+    networks:
+      - internal_network
+      - traefik-homelab
+    volumes:
+      - ./files:/misskey/files
+      - ./.config:/misskey/.config
+    labels:
+      - "traefik.enable=true"
+      - 'traefik.http.routers.misskey-web.entrypoints=https'
+      - "traefik.http.routers.misskey-web.rule=Host(`misskey.${MY_DOMAIN}`)"
+      - "traefik.http.routers.misskey-web.tls.certresolver=myresolver"
+      - "traefik.http.routers.misskey-web.service=misskey-web@docker"
+      - "traefik.http.services.misskey-web.loadbalancer.server.port=3000"
+      - "traefik.http.routers.misskey-web.middlewares=authelia@docker"
+      - "traefik.http.routers.misskey-web.tls.options=default"
+  redis:
+    container_name: misskey-redis
+    restart: always
+    image: redis:4.0-alpine
+    networks:
+      - internal_network
+    volumes:
+      - ./redis:/data
+
+  db:
+    container_name: misskey-db
+    restart: always
+    image: postgres:12.2-alpine
+    networks:
+      - internal_network
+    env_file:
+      - .config/docker.env
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+#  es:
+#    restart: always
+#    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
+#    environment:
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    networks:
+#      - internal_network
+#    volumes:
+#      - ./elasticsearch:/usr/share/elasticsearch/data
+
+networks:
+  internal_network:
+    internal: true
+  traefik-homelab:
+    external:
+      name: traefik-homelab
