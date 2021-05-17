@@ -7,7 +7,7 @@ host: 0.0.0.0
 port: 9091
 log_level: debug
 jwt_secret: a_very_important_secret
-default_redirection_url: https://public.example.com
+default_redirection_url: https://public.shannonquigley.best
 totp:
   issuer: authelia.com
 
@@ -18,11 +18,11 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    - domain: public.example.com
+    - domain: public.shannonquigley.best
       policy: bypass
-    - domain: traefik.example.com
+    - domain: traefik.shannonquigley.best
       policy: one_factor
-    - domain: secure.example.com
+    - domain: secure.shannonquigley.best
       policy: two_factor
 
 session:
@@ -30,7 +30,7 @@ session:
   secret: unsecure_session_secret
   expiration: 3600  # 1 hour
   inactivity: 300  # 5 minutes
-  domain: example.com  # Should match whatever your root protected domain is
+  domain: shannonquigley.best  # Should match whatever your root protected domain is
 
 regulation:
   max_retries: 3

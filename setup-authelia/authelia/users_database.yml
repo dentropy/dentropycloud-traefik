@@ -7,10 +7,10 @@
 
 # List of users
 users:
-  <USERNAME>:
-    displayname: "<DISPLAYNAME>"
-    password: "<PASSWORD>"
-    email: <USERNAME>@example.com
+  dentropy:
+    displayname: "dentropy"
+    password: "$argon2id$v=19$m=65536,t=1,p=8$TFRjODBkWkFVcG44M2pPYg$XIv/iYSz7lpvIQRWJpyDuewJ8nKpztj5znOQL+4oRUM"
+    email: dentropy@example.com
     groups:
       - admins
       - dev
