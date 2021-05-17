@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+  trilium:
+    image: zadam/trilium:0.45.10
+    container_name: trilium
+    restart: always
+    environment:
+      - TRILIUM_DATA_DIR=/data
+    #ports:
+    #  - "127.0.0.1:8088:8080"
+    expose:
+        - "8080"
+    volumes:
+      - ./trilium-data:/data
+    labels:
+    - "traefik.enable=true"
+    - 'traefik.http.routers.trilium.entrypoints=https'
+    - "traefik.http.routers.trilium.rule=Host(`trilium.${MY_DOMAIN}`)"
+    - "traefik.http.routers.trilium.tls.certresolver=myresolver"
+    - "traefik.http.routers.trilium.service=trilium@docker"
+    - "traefik.http.services.trilium.loadbalancer.server.port=8080"
+    - "traefik.http.routers.trilium.middlewares=authelia@docker"
+    - "traefik.http.routers.trilium.tls.options=default"
