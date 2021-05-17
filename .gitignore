@@ -7,3 +7,4 @@ setup-authelia-secure/traefik
 setup-authelia-secure/authelia/
 setup-authelia-secure/authelia/configuration.yml
 setup-authelia-secure/authelia/users_database.yml
+setup-authelia-secure/letsencrypt/

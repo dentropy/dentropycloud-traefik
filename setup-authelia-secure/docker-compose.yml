@@ -24,11 +24,6 @@ services:
       - 'traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true'
       - 'traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email'  # yamllint disable-line rule:line-length
       - "--providers.docker.exposedbydefault=false"
-      #- "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=${MY_EMAIL}"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     expose:
       - 9091
     restart: unless-stopped
@@ -41,7 +36,8 @@ services:
     image: traefik:2.4
     container_name: traefik
     volumes:
-      - ./traefik:/etc/traefik
+      #- ./traefik:/etc/traefik
+      - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
@@ -52,7 +48,7 @@ services:
       - 'traefik.http.routers.api.entrypoints=https'
       - 'traefik.http.routers.api.service=api@internal'
       - 'traefik.http.routers.api.tls=true'
-      - 'traefik.http.routers.api.tls.options=default'
+      #- 'traefik.http.routers.api.tls.options=default'
       - 'traefik.http.routers.api.middlewares=authelia@docker'
     ports:
       - 80:80
@@ -70,6 +66,11 @@ services:
       - '--entrypoints.https.address=:443'
       - '--log=true'
       - '--log.level=DEBUG'
+      #- "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=${MY_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
 
   secure:
     image: traefik/whoami
