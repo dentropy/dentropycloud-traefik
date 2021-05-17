@@ -1,0 +1,61 @@
+version: "3"
+
+volumes:
+    wikijs-db: 
+      external: true
+  
+networks:
+    internal_network:
+      internal: true
+    traefik-homelab:
+      external:
+        name: traefik-homelab
+
+services:
+
+  db:
+    image: postgres:11-alpine
+    container_name: wikijs-db
+    environment:
+      POSTGRES_DB: wiki
+      POSTGRES_PASSWORD: wikijsrocks
+      POSTGRES_USER: wikijs
+    networks:
+        - internal_network
+    logging:
+      driver: "none"
+    restart: unless-stopped
+    volumes:
+      - wikijs-db:/var/lib/postgresql/data
+
+  wikijs-server:
+    image: requarks/wiki:2
+    container_name: wikijs-server
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    restart: unless-stopped
+    networks:
+        - internal_network
+        - traefik-homelab
+    #ports:
+    # - "3000"
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - 'traefik.http.routers.wikijs-server.entrypoints=https'
+      - "traefik.http.routers.wikijs-server.rule=Host(`wiki.${MY_DOMAIN}`)"
+      - "traefik.http.routers.wikijs-server.tls.certresolver=myresolver"
+      - "traefik.http.routers.wikijs-server.service=wikijs-server@docker"
+      - "traefik.http.services.wikijs-server.loadbalancer.server.port=3000"
+      - "traefik.http.routers.wikijs-server.middlewares=authelia@docker"
+      - "traefik.http.routers.wikijs-server.tls.options=default"
+
+    
