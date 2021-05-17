@@ -4,6 +4,11 @@ version: '3.3'
 networks:
   net:
     driver: bridge
+  internal_network:
+    internal: true
+  traefik-homelab:
+    external:
+      name: traefik-homelab
 
 services:
   authelia:
@@ -30,7 +35,7 @@ services:
     healthcheck:
       disable: true
     environment:
-      - TZ=Australia/Melbourne
+      - TZ=America/New_York
 
   traefik:
     image: traefik:2.4
@@ -41,6 +46,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
+      - traefik-homelab
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.api.rule=Host(`traefik.${MY_DOMAIN}`)'
@@ -57,7 +63,7 @@ services:
       - '--api'
       - '--providers.docker=true'
       - '--providers.docker.exposedByDefault=false'
-      - '--providers.file.filename=/etc/traefik/certificates.yml'
+      #- '--providers.file.filename=/etc/traefik/certificates.yml'
       - '--entrypoints.http=true'
       - '--entrypoints.http.address=:80'
       - '--entrypoints.http.http.redirections.entrypoint.to=https'
@@ -105,4 +111,4 @@ services:
     expose:
       - 80
     restart: unless-stopped
-...
+    
