@@ -28,6 +28,7 @@ services:
       - "traefik.http.services.misskey-web.loadbalancer.server.port=3000"
       - "traefik.http.routers.misskey-web.middlewares=authelia@docker"
       - "traefik.http.routers.misskey-web.tls.options=default"
+      - "traefik.docker.network=traefik-homelab"
   redis:
     container_name: misskey-redis
     restart: always

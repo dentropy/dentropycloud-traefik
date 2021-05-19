@@ -57,5 +57,5 @@ services:
       - "traefik.http.services.wikijs-server.loadbalancer.server.port=3000"
       - "traefik.http.routers.wikijs-server.middlewares=authelia@docker"
       - "traefik.http.routers.wikijs-server.tls.options=default"
-
+      - "traefik.docker.network=traefik-homelab"
     
