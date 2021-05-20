@@ -1,0 +1,3 @@
+# jellyfin
+
+Tested and working
