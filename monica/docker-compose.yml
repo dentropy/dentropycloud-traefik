@@ -14,7 +14,9 @@ services:
         - traefik-homelab
         - monica-network
     environment:
-      - APP_KEY=h98Utk7iQ/Wo7/dGWON4aXqQQdlCGJF4excisFXfcpk= # echo -n 'base64:'; openssl rand -base64 32
+      - "APP_KEY=base64:OY3HtmTu8LrdBlOvNrBpb57C8rjkEggWntn5BFh9jDg=" # echo -n 'base64:'; openssl rand -base64 32
+      - APP_ENV=local
+      - APP_TRUSTED_PROXIES=*
       - DB_HOST=monica-db
       - DB_USERNAME=usermonica
       - DB_PASSWORD=secret
