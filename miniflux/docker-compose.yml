@@ -1,0 +1,54 @@
+version: '3'
+services:
+  miniflux-app:
+    image: miniflux/miniflux:latest
+    container_name: miniflux-app
+    ports:
+      - "81:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - db
+      #  condition: service_healthy
+    restart: always
+    networks:
+      - traefik-homelab
+      - miniflux-network
+    environment:
+      - DATABASE_URL=postgres://miniflux:secret@db/miniflux?sslmode=disable
+      - RUN_MIGRATIONS=1
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.miniflux-app.entrypoints=https"
+        - "traefik.http.routers.miniflux-app.rule=Host(`rss.${MY_DOMAIN}`)"
+        - "traefik.http.routers.miniflux-app.tls.certresolver=myresolver"
+        - "traefik.http.routers.miniflux-app.service=miniflux-app@docker"
+        - "traefik.http.routers.miniflux-app.middlewares=authelia@docker"
+        - "traefik.http.routers.miniflux-app.tls.options=default"
+        - "traefik.http.services.miniflux-app.loadbalancer.server.port=8080"
+        - "traefik.docker.network=traefik-homelab"
+  db:
+    image: postgres:latest
+    container_name: miniflux-db
+    environment:
+      - POSTGRES_USER=miniflux
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - miniflux-db:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - miniflux-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "miniflux"]
+      interval: 10s
+      #start_period: 30s
+
+volumes:
+  miniflux-db:
+
+networks:
+  traefik-homelab:
+    external:
+      name: traefik-homelab
+  miniflux-network:
+    internal: true
