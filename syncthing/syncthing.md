@@ -1,3 +1,3 @@
 # syncthing
 
-* TEST default container on a local VM
+* Tested and working

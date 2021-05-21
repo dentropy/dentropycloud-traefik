@@ -8,9 +8,12 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
+      - gui-address=0.0.0.0:8384 
     volumes:
       - ./syncthing/config:/config
       - ./syncthing/data1:/data1
+    networks:
+      - traefik-homelab
     ports:
       - 8384:8084/tcp
       - 22000:22000/tcp
