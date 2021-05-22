@@ -1,1 +1,1 @@
-# Put your OVPN file in here as config.ovpn
+# Placeholder, put config.ovpn in this folder

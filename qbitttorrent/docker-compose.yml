@@ -3,7 +3,7 @@ services:
   qbittorrent-openvpn:
     container_name: qbittorrent-openvpn
     volumes:
-      - "./downloads:/downloads"
+      - "${VOLUME_DIR}/qbittorrent/downloads:/downloads"
       - "./config:/config"
       - "/etc/localtime:/etc/localtime:ro"
     cap_add:
