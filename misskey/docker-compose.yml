@@ -6,8 +6,8 @@ services:
     image: misskey/misskey
     restart: always
     links:
-      - db
-      - redis
+      - misskey-db
+      - misskey-redis
     #  - es
     #ports:
     # - "3000:3000"
@@ -17,7 +17,7 @@ services:
       - internal_network
       - traefik-homelab
     volumes:
-      - ./files:/misskey/files
+      - ${VOLUME_DIR}/misskey/files:/misskey/files
       - ./.config:/misskey/.config
     labels:
       - "traefik.enable=true"
@@ -29,16 +29,16 @@ services:
       - "traefik.http.routers.misskey-web.middlewares=authelia@docker"
       - "traefik.http.routers.misskey-web.tls.options=default"
       - "traefik.docker.network=traefik-homelab"
-  redis:
+  misskey-redis:
     container_name: misskey-redis
     restart: always
     image: redis:4.0-alpine
     networks:
       - internal_network
     volumes:
-      - ./redis:/data
+      - ${VOLUME_DIR}/misskey/redis:/data
 
-  db:
+  misskey-db:
     container_name: misskey-db
     restart: always
     image: postgres:12.2-alpine
@@ -47,7 +47,7 @@ services:
     env_file:
       - .config/docker.env
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ${VOLUME_DIR}/misskey/db:/var/lib/postgresql/data
 
 #  es:
 #    restart: always
