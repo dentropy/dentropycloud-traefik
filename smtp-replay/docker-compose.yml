@@ -1,0 +1,19 @@
+version: '2'
+services:
+  postfix:
+    image: juanluisbaptiste/postfix:latest
+    container_name: postfix
+    expose:
+    - "25"
+    restart: always
+    volumes:
+     - "/etc/localtime:/etc/localtime:ro"
+    networks:
+      - traefik-homelab
+    env_file:
+      - ../.env
+
+networks:
+  traefik-homelab:
+    external:
+      name: traefik-homelab
