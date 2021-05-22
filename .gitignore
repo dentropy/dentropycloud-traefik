@@ -16,5 +16,5 @@ misskey/db
 misskey/es
 /trilium/trilium-data
 /syncthing/syncthing
-qbittorrent/config
-qbittorrent/downloads
+qbittorrent/config/*
+qbittorrent/downloads/*
