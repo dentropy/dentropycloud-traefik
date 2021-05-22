@@ -34,7 +34,7 @@ services:
       - POSTGRES_USER=miniflux
       - POSTGRES_PASSWORD=secret
     volumes:
-      - miniflux-db:/var/lib/postgresql/data
+      - ${VOLUME_DIR}/miniflux:/var/lib/postgresql/data
     restart: always
     networks:
       - miniflux-network
@@ -42,9 +42,6 @@ services:
       test: ["CMD", "pg_isready", "-U", "miniflux"]
       interval: 10s
       #start_period: 30s
-
-volumes:
-  miniflux-db:
 
 networks:
   traefik-homelab:
