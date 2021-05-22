@@ -1,8 +1,4 @@
 version: "3"
-
-volumes:
-    wikijs-db: 
-      external: true
   
 networks:
     internal_network:
@@ -26,7 +22,7 @@ services:
       driver: "none"
     restart: unless-stopped
     volumes:
-      - wikijs-db:/var/lib/postgresql/data
+      - ${VOLUME_DIR}/wikijs/db:/var/lib/postgresql/data
 
   wikijs-server:
     image: requarks/wiki:2
