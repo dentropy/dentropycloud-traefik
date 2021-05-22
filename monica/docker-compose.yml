@@ -21,7 +21,7 @@ services:
       - DB_USERNAME=usermonica
       - DB_PASSWORD=secret
     volumes:
-      - data:/var/www/html/storage
+      - ${VOLUME_DIR}/monica/data:/var/www/html/storage
     restart: always
     labels:
         - "traefik.enable=true"
@@ -43,7 +43,7 @@ services:
       - MYSQL_USER=usermonica
       - MYSQL_PASSWORD=secret
     volumes:
-      - mysql:/var/lib/mysql
+      - ${VOLUME_DIR}/monica/db:/var/lib/mysql
     networks:
       - monica-network
     expose:
