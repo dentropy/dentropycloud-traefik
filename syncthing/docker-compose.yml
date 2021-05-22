@@ -10,8 +10,8 @@ services:
       - TZ=Europe/London
       - gui-address=0.0.0.0:8384 
     volumes:
-      - ./syncthing/config:/config
-      - ./syncthing/data1:/data1
+      - ${VOLUME_DIR}/syncthing/config:/config
+      - ${VOLUME_DIR}/syncthing/data1:/data1
     networks:
       - traefik-homelab
     ports:
