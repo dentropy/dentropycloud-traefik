@@ -13,7 +13,7 @@ services:
     expose:
         - "8080"
     volumes:
-      - ./trilium-data:/data
+      - ${VOLUME_DIR}/trilium:/data
     labels:
     - "traefik.enable=true"
     - 'traefik.http.routers.trilium.entrypoints=https'
