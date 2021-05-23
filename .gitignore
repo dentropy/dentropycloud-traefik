@@ -4,7 +4,7 @@ traefik/setup-authelia/authelia/
 traefik/setup-authelia/authelia/configuration.yml
 traefik/setup-authelia/authelia/users_database.yml
 traefik/setup-authelia-secure/traefik
-traefik/setup-authelia-secure/authelia/
+traefik/setup-authelia-secure/authelia
 traefik/setup-authelia-secure/authelia/configuration.yml
 traefik/setup-authelia-secure/authelia/users_database.yml
 traefik/setup-authelia-secure/letsencrypt/
@@ -16,5 +16,5 @@ misskey/db
 misskey/es
 /trilium/trilium-data
 /syncthing/syncthing
-qbittorrent/config/*
-qbittorrent/downloads/*
+qbitttorrent/config
+qbittorrent/downloads

@@ -7,7 +7,7 @@ host: 0.0.0.0
 port: 9091
 log_level: debug
 jwt_secret: a_very_important_secret
-default_redirection_url: https://public.shannonquigley.best
+default_redirection_url: https://public.example.com
 totp:
   issuer: authelia.com
 
@@ -18,19 +18,37 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    - domain: public.shannonquigley.best
+    - domain: public.example.com
       policy: bypass
-    - domain: traefik.shannonquigley.best
+    - domain: wiki.example.com
       policy: one_factor
-    - domain: secure.shannonquigley.best
+    - domain: misskey.example.com
+      policy: bypass
+    - domain: traefik.example.com
+      policy: one_factor
+    - domain: secure.example.com
       policy: two_factor
+    - domain: trilium.example.com
+      policy: one_factor
+    - domain: jellyfin.example.com
+      policy: one_factor
+    - domain: monica.example.com
+      policy: bypass
+    - domain: host.example.com
+      policy: bypass
+    - domain: syncthing.example.com
+      policy: one_factor
+    - domain: miniflux.example.com
+      policy: one_factor
+
+
 
 session:
   name: authelia_session
   secret: unsecure_session_secret
   expiration: 3600  # 1 hour
   inactivity: 300  # 5 minutes
-  domain: shannonquigley.best  # Should match whatever your root protected domain is
+  domain: example.com  # Should match whatever your root protected domain is
 
 regulation:
   max_retries: 3
@@ -44,4 +62,3 @@ storage:
 notifier:
   filesystem:
     filename: /config/notification.txt
-...

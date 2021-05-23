@@ -20,7 +20,7 @@ services:
     labels:
         - "traefik.enable=true"
         - "traefik.http.routers.miniflux-app.entrypoints=https"
-        - "traefik.http.routers.miniflux-app.rule=Host(`rss.${MY_DOMAIN}`)"
+        - "traefik.http.routers.miniflux-app.rule=Host(`miniflux.${MY_DOMAIN}`)"
         - "traefik.http.routers.miniflux-app.tls.certresolver=myresolver"
         - "traefik.http.routers.miniflux-app.service=miniflux-app@docker"
         - "traefik.http.routers.miniflux-app.middlewares=authelia@docker"
