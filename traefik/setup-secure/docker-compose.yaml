@@ -10,21 +10,44 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       # It's a good practice to persist the Letsencrypt certificates so that they don't change if the Traefik container needs to be restarted.
       - "./letsencrypt:/letsencrypt"
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api.rule=Host(`traefik.${MY_DOMAIN}`)'
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
+      - 'traefik.http.routers.api.entrypoints=https'
+      - 'traefik.http.routers.api.tls=true'
     command:
-      - --providers.docker
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --providers.docker.network=traefik-homelab
-      - '--providers.docker.defaultRule=Host(`traefik.${MY_DOMAIN}`)'
+      - '--api'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedByDefault=false'
+      #- '--providers.file.filename=/etc/traefik/certificates.yml'
+      - '--entrypoints.http=true'
+      - '--entrypoints.http.address=:80'
+      - '--entrypoints.http.http.redirections.entrypoint.to=https'
+      - '--entrypoints.http.http.redirections.entrypoint.scheme=https'
+      - '--entrypoints.https=true'
+      - '--entrypoints.https.address=:443'
+      - '--log=true'
+      - '--log.level=DEBUG'
+
       # We're going to use the DNS challenge since it allows us to generate
       # certificates for intranet/lan sites as well
-      - "--certificatesresolvers.le.acme.dnschallenge=true"
       # We're using letsencrypt for this example, but many DNS providers are
       # supported: https://docs.traefik.io/https/acme/#providers 
-      - --certificatesresolvers.le.acme.email=${MY_EMAIL}
-      - --certificatesresolvers.le.acme.storage=/acme.json
-      - --certificatesresolvers.le.acme.tlschallenge=true
-    #environment:
+
+      # General Lets Encrypt Resolvers
+      - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
+      - --certificatesresolvers.myresolver.acme.email=${MY_EMAIL}
+      - --certificatesresolvers.myresolver.acme.storage=/acme.json
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+
+      # Linode Lets Encrypt Resolvers
+      - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=linodev4"
+      - "--certificatesresolvers.myresolver.acme.email=${MY_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    environment:
+      - LINODE_TOKEN=${LINODE_TOKEN}
       # We need to provide credentials to our DNS provider.
       # See https://docs.traefik.io/https/acme/#providers 
       #- "CF_DNS_API_TOKEN=XXXXXXXXX"
@@ -32,13 +55,24 @@ services:
     networks:
       - traefik-homelab
 
-  hellosvc:
-    image: containous/whoami
+
+  public:
+    image: traefik/whoami
+    container_name: public
     labels:
-      - traefik.http.routers.hellosvc.entrypoints=websecure
-      - 'traefik.http.routers.hellosvc.tls.certresolver=le'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.public.rule=Host(`public.${MY_DOMAIN}`)'
+      - "traefik.http.routers.public.tls.certresolver=myresolver"
+      - 'traefik.http.routers.public.entrypoints=https'
+      - 'traefik.http.routers.public.tls=true'
+      - 'traefik.http.routers.public.tls.options=default'
+      #- 'traefik.http.routers.public.middlewares=authelia@docker'
+    expose:
+      - 80
+    restart: unless-stopped
     networks:
       - traefik-homelab
+
 networks:
     traefik-homelab:
         external:

@@ -3,6 +3,7 @@ MY_DOMAIN=domain.tld
 OPENVPN_USERNAME=USERNAME
 OPENVPN_USERNAME=PASSWORD
 VOLUME_DIR=/PATH/TO/DATA/VOLUME
+LINODE_TOKEN=ENTROPY
 
 # SMTP Reply stuff below
 # Mandatory: Server address of the SMTP server to use.
