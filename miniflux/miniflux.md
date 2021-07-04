@@ -5,7 +5,7 @@
 ```
 # Create the first user
 
-docker-compose exec miniflux /usr/bin/miniflux -create-admin
+docker-compose exec miniflux-app /usr/bin/miniflux -create-admin
 ```
 
 [Documentation](https://miniflux.app/docs/installation.html#docker)

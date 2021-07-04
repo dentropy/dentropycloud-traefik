@@ -18,8 +18,10 @@ services:
       - PUID=1000
       - PGID=1000
       - LAN=192.168.0.0/16
-    ports:
-      - "8080:8080"
+    #ports:
+    #  - "8080:8080"
+    expose:
+      - 8080
     #cap_add:
     #  - NET_ADMIN
     image: guillaumedsde/alpine-qbittorrent-openvpn:latest
