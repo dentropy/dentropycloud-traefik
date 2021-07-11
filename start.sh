@@ -3,8 +3,8 @@ startApps=("miniflux" "misskey" "monica" "qbitttorrent" "static" "syncthing" "tr
 for value in ${!startApps[@]}
 do
     echo ${startApps[$value]}
-    cd ${startApps[$value]} && docker-compose --env-file ../.env up -d
+    cd ${startApps[$value]} && ./start.sh
     cd ..
 done
 cd traefik/setup-authelia-secure
-docker-compose --env-file ../../.env up -d 
+./start.sh
