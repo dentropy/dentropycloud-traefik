@@ -1,0 +1,67 @@
+# This example assumes, that you are running a jwilders/nginx proxy
+# with certificate generation by a letsencrypt companion container
+# as described here:
+#
+# https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion/blob/master/docs/Docker-Compose.md
+#
+# This should provide a docker volume containing the generated certificates.
+# We will use the same cert and key as the webproxy for the actual solid server. While it seems to
+# work, I am not sure if it is actually a good idea. Please file an issue if you want to discuss this.
+
+# Adjust any line that is commented with (!):
+# 1. Change any occurrence of the domain `solid.example` to your actual domain
+# 2. Adjust the `latest` tag to a specific version you want to use.
+
+version: '3.7'
+services:
+  solid:
+    image: nodesolidserver/node-solid-server:latest # (!) use specific version tag here
+    container_name: solid
+    user: root
+    # this ensures automatic container start, when host reboots
+    restart: always
+    networks:
+        - traefik-homelab
+    #expose:
+    #  - 8443
+    ports:
+        - 8443:8443
+    volumes:
+      # mount local directories to the container
+      # (!) the host directories have to exist and be owned by UID 1000
+      - ./solid/data:/opt/solid/data
+      - ./solid/.db:/opt/solid/.db
+      - ./solid/config:/opt/solid/config
+      - ./letsencrypt:/letsencrypt
+
+    environment:
+      # (!) use your actual SOLID_SERVER_URI
+      - "SOLID_SERVER_URI=https://solid.${MY_DOMAIN}"
+      # (!) adjust path to the letsencrypt key and cert
+      - "SOLID_SSL_KEY=/letsencrypt/solid.${MY_DOMAIN}.key"
+      - "SOLID_SSL_CERT=/letsencrypt/solid.${MY_DOMAIN}.crt"
+      # (!) use your actual host name
+      - "VIRTUAL_HOST=solid.${MY_DOMAIN}"
+      - "VIRTUAL_PORT=8443"
+      - "VIRTUAL_PROTO=http"
+      # (!) use your actual host name
+      #- "LETSENCRYPT_HOST=solid.${MY_DOMAIN}"
+      # (!) use your actual email
+      #- "LETSENCRYPT_EMAIL=${MY_EMAIL}"
+    labels:
+        - "traefik.enable=true"
+        - 'traefik.http.routers.solid.entrypoints=https'
+        - "traefik.http.routers.solid.rule=Host(`solid.${MY_DOMAIN}`)"
+        - "traefik.http.routers.solid.tls.certresolver=myresolver"
+        - "traefik.http.routers.solid.service=solid@docker"
+        - "traefik.http.services.solid.loadbalancer.server.port=8443"
+        #- "traefik.http.routers.trilium.middlewares=authelia@docker"
+        - "traefik.http.routers.solid.tls.options=default"
+        - "traefik.docker.network=traefik-homelab"
+        #- "traefik.http.services.solid.loadbalancer.server.scheme=https"
+
+
+networks:
+    traefik-homelab:
+        external:
+            name: traefik-homelab
