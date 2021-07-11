@@ -1,3 +1,4 @@
+# https://github.com/solid/node-solid-server/blob/main/docker-image/examples/docker-compose.nginx.yml
 # This example assumes, that you are running a jwilders/nginx proxy
 # with certificate generation by a letsencrypt companion container
 # as described here:
