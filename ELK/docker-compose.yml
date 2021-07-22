@@ -33,7 +33,7 @@ services:
         - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.${MY_DOMAIN}`)"
         - "traefik.http.routers.elasticsearch.tls.certresolver=myresolver"
         - "traefik.http.routers.elasticsearch.service=elasticsearch@docker"
-        - "traefik.http.services.elasticsearch.loadbalancer.server.port=9300"
+        - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
         - "traefik.http.routers.elasticsearch.tls.options=default"
         - "traefik.docker.network=traefik-homelab"
 
