@@ -26,9 +26,9 @@ else
         sed -i "${lineNum}s/.*/        password => \"${tmpPASSWORD}\"/g" ./docker-elk/logstash/pipeline/logstash.conf 
     fi
     if grep -q ELK_VERSION ../.env; then
-        echo "ELK_VERSION=7.13.2" >> ../.env
-    else
         cat ../.env | grep ELK_VERSION
+    else
+        echo "ELK_VERSION=7.13.2" >> ../.env
     fi
     echo "Starting docker-elk" 
     cd docker-elk && docker-compose --env-file ../../.env up -d
