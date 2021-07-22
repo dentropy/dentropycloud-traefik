@@ -42,7 +42,7 @@ services:
     container_name: traefik
     volumes:
       #- ./traefik:/etc/traefik
-      - ./letsencrypt:/letsencrypt
+      - "${VOLUME_DIR}/letsencrypt:/letsencrypt"
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
