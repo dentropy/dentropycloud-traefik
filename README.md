@@ -5,11 +5,15 @@ Here is my homelab deployment.
 ```
 docker network create traefik-homelab
 
-mv env_example .env
+cp env_example .env
 
-vim .env
+nano .env
 
-# Edit vim file accordingly
+# Edit file accordingly
+# ONLY MY_EMAIL, MY_DOMAIN, and VOLUME_DIR are required
+# VOLUME_DIR can be set to /srv for example
+VOLUME_DIR=/srv
+# SPACING MATTERS
 
 cd traefik/setup-authelia-secure
 
@@ -19,11 +23,7 @@ bash setup.sh
 
 # Wait 3 minutes
 
-docker-compose --env-file ../../.env down
+./stop
 
-docker-compose --env-file ../../.env up
-
-# To add more applications just go into the application folder and run  the below command
-
-docker-compose --env-file ../.env up
+./start
 ```
