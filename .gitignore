@@ -18,3 +18,4 @@ misskey/es
 /syncthing/syncthing
 qbitttorrent/config
 qbittorrent/downloads
+ELK/docker-elk
