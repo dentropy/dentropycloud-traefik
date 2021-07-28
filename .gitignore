@@ -19,3 +19,4 @@ misskey/es
 qbitttorrent/config
 qbittorrent/downloads
 ELK/docker-elk
+/static/_site
