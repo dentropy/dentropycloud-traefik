@@ -26,7 +26,7 @@ services:
         - "traefik.http.routers.audioserve.rule=Host(`audioserve.${MY_DOMAIN}`)"
         - "traefik.http.routers.audioserve.tls.certresolver=myresolver"
         - "traefik.http.routers.audioserve.service=audioserve@docker"
-        - "traefik.http.services.audioserve.loadbalancer.server.port=8096"
+        - "traefik.http.services.audioserve.loadbalancer.server.port=3000"
         - "traefik.http.routers.audioserve.middlewares=authelia@docker"
         - "traefik.http.routers.audioserve.tls.options=default"
         - "traefik.docker.network=traefik-homelab"

@@ -24,6 +24,7 @@ services:
       - 8080
     #cap_add:
     #  - NET_ADMIN
+    restart: always
     image: guillaumedsde/alpine-qbittorrent-openvpn:latest
     labels:
         - "traefik.enable=true"
