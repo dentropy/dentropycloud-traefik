@@ -14,12 +14,12 @@ services:
       - type: volume
         source: elasticsearch
         target: /usr/share/elasticsearch/data
-    expose:
-      - "9200"
-      - "9300"
-    #ports:
-    #  - "9200:9200"
-    #  - "9300:9300"
+    #expose:
+    #  - "9200"
+    #  - "9300"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
     restart: always
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
@@ -54,16 +54,16 @@ services:
         source: ./logstash/pipeline
         target: /usr/share/logstash/pipeline
         read_only: true
-    #ports:
-    #  - "5044:5044"
-    #  - "5000:5000/tcp"
-    #  - "5000:5000/udp"
-    #  - "9600:9600"
-    expose:
-      - "5044"
-      - "5000/tcp"
-      - "5000/udp"
-      - "9600"
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+    #expose:
+    #  - "5044"
+    #  - "5000/tcp"
+    #  - "5000/udp"
+    #  - "9600"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     restart: always
@@ -83,10 +83,10 @@ services:
         source: ./kibana/config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
         read_only: true
-    expose:
-      - "5601"
-    #ports:
-    #  - "5601:5601"
+    #expose:
+    #  - "5601"
+    ports:
+      - "5601:5601"
     networks:
       - elk
       - traefik-homelab
