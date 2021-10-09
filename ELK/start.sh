@@ -25,7 +25,7 @@ else
         lineNum=`grep -n password ./docker-elk/logstash/pipeline/logstash.conf | cut -d : -f 1`
         sed -i "${lineNum}s/.*/        password => \"${tmpPASSWORD}\"/g" ./docker-elk/logstash/pipeline/logstash.conf 
     fi
-    if grep -q ELK_VERSION ../.env; then
+    if grep -q ELK_VERSION ../../.env; then
         cat ../.env | grep ELK_VERSION
     else
         echo "ELK_VERSION=7.13.2" >> ../.env
