@@ -4,7 +4,7 @@ if [ -d "./docker-elk" ]
 then
     echo "Starting docker-elk" 
     cat ../../.env | grep ELASTIC_PASSWORD
-    cd docker-elk && docker-compose --env-file ../../.env up -d
+    cd docker-elk && docker-compose --env-file ../../../.env up -d
 else
     echo "git cloning docker-elk"
     git clone https://github.com/deviantony/docker-elk.git
@@ -31,5 +31,5 @@ else
         echo "ELK_VERSION=7.13.2" >> ../../.env
     fi
     echo "Starting docker-elk" 
-    cd docker-elk && docker-compose --env-file ../../.env up -d
+    cd docker-elk && docker-compose --env-file ../../../.env up -d
 fi
