@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  qbittorrent-openvpn:
+    container_name: qbittorrent-openvpn
+    volumes:
+      - "${VOLUME_DIR}/qbittorrent/downloads:/downloads"
+      - "./config:/config"
+      - "/etc/localtime:/etc/localtime:ro"
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - traefik-homelab
+    environment:
+      #- OPENVPN_PROVIDER=WINDSCRIBE
+      #- OPENVPN_CONFIG=Paris-Seine-udp
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - PUID=1000
+      - PGID=1000
+      - LAN=192.168.0.0/16
+    #ports:
+    #  - "8080:8080"
+    expose:
+      - 8080
+    #cap_add:
+    #  - NET_ADMIN
+    restart: always
+    image: guillaumedsde/alpine-qbittorrent-openvpn:latest
+    labels:
+        - "traefik.enable=true"
+        - 'traefik.http.routers.qbittorrent-openvpn.entrypoints=https'
+        - "traefik.http.routers.qbittorrent-openvpn.rule=Host(`host.${MY_DOMAIN}`)"
+        - "traefik.http.routers.qbittorrent-openvpn.tls.certresolver=myresolver"
+        - "traefik.http.routers.qbittorrent-openvpn.service=qbittorrent-openvpn@docker"
+        - "traefik.http.services.qbittorrent-openvpn.loadbalancer.server.port=8080"
+        - "traefik.http.routers.qbittorrent-openvpn.middlewares=authelia@docker"
+        - "traefik.http.routers.qbittorrent-openvpn.tls.options=default"
+        - "traefik.docker.network=traefik-homelab"
+
+networks:
+  traefik-homelab:
+    external:
+      name: traefik-homelab

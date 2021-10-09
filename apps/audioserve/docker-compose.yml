@@ -1,0 +1,36 @@
+version: '3.3'
+
+networks:
+    traefik-homelab:
+      external:
+        name: traefik-homelab
+services:
+  audioserve:
+    image: izderadicka/audioserve
+    container_name: audioserve
+    user: 0:0 # TODO Ya I know
+    environment:
+      - AUDIOSERVE_SHARED_SECRET=${AUDIOSERVE_PASSWORD}
+      - TZ=America/New_York
+    volumes:
+      - ${AUDIOBOOK_DIRECTORY}:/collection1
+      - ${VOLUME_DIR}/audioserve/caching:/home/audioserve/.audioserve
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+        - traefik-homelab
+    labels:
+        - "traefik.enable=true"
+        - 'traefik.http.routers.audioserve.entrypoints=https'
+        - "traefik.http.routers.audioserve.rule=Host(`audioserve.${MY_DOMAIN}`)"
+        - "traefik.http.routers.audioserve.tls.certresolver=myresolver"
+        - "traefik.http.routers.audioserve.service=audioserve@docker"
+        - "traefik.http.services.audioserve.loadbalancer.server.port=3000"
+        - "traefik.http.routers.audioserve.middlewares=authelia@docker"
+        - "traefik.http.routers.audioserve.tls.options=default"
+        - "traefik.docker.network=traefik-homelab"
+    #command: ["--help"]
+    #command: ["--search-cache /collection1"]
+    #command: ["--base-dir /collection1"]
+    command: ["/collection1"]
