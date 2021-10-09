@@ -31,5 +31,5 @@ else
         echo "ELK_VERSION=7.13.2" >> ../.env
     fi
     echo "Starting docker-elk" 
-    cd docker-elk && docker-compose --env-file ../../.env up -d
+    cd docker-elk && docker-compose --env-file ../.env up -d
 fi
