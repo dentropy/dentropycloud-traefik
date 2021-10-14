@@ -59,10 +59,10 @@ services:
 volumes:
   opensearch-data1:
     external:
-      name: traefik-homelab
+      name: opensearch-data1
   opensearch-data2:
     external:
-      name: traefik-homelab
+      name: opensearch-data1
 
 networks:
   opensearch-net:
