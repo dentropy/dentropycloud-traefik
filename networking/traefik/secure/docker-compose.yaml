@@ -10,6 +10,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       # It's a good practice to persist the Letsencrypt certificates so that they don't change if the Traefik container needs to be restarted.
       - "${VOLUME_DIR}/letsencrypt:/letsencrypt"
+    restart: unless-stopped
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.api.rule=Host(`traefik.${MY_DOMAIN}`)'
