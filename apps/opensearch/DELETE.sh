@@ -1,5 +1,6 @@
 #!/bin/bash
 ./stop.sh
-docker volume rm elasticsearch
-docker volume create elasticsearch
-rm -rf docker-elk
+docker volume rm opensearch-data1
+docker volume create opensearch-data1
+docker volume rm opensearch-data2
+docker volume create opensearch-data2
