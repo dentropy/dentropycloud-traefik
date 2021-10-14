@@ -18,8 +18,9 @@ services:
         soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
         hard: 65536
     volumes:
+      - /home/paul/Projects/ddaemon/dentropycloud-traefik/apps/opensearch/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
       - opensearch-data1:/usr/share/opensearch/data
-      - ./opensearch-config/internal_users.yml::/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
+      #- ./opensearch-config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml
     ports:
       - 9200:9200
       - 9600:9600 # required for Performance Analyzer
@@ -43,8 +44,9 @@ services:
         soft: 65536
         hard: 65536
     volumes:
+      - /home/paul/Projects/ddaemon/dentropycloud-traefik/apps/opensearch/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
       - opensearch-data2:/usr/share/opensearch/data
-      - ./opensearch-config/internal_users.yml::/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
+      #- ./opensearch-config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml
     networks:
       - opensearch-net
   opensearch-dashboards:
