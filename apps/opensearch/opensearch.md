@@ -16,14 +16,31 @@ docker-compose -f docker-compose-insecure.yml down
 docker-compose exec os01 bash -c "chmod +x plugins/opensearch-security/tools/securityadmin.sh && bash plugins/opensearch-security/tools/securityadmin.sh -cd plugins/opensearch-security/securityconfig -icl -nhnv -cacert config/certificates/ca/ca.pem -cert config/certificates/ca/admin.pem -key config/certificates/ca/admin.key -h localhost"
 ```
 
-## Change Password Attempt
+
+## Setup
 
 ``` bash
-plugins/opensearch-security/tools/hash.sh -p <new-password>
-tmpPASSWORD=`tr -cd '[:alnum:]' < /dev/urandom | fold -w31 | head -n1`
-tmpHash=`docker-compose exec os01 bash -c "chmod +x plugins/opensearch-security/tools/hash.sh && bash plugins/opensearch-security/tools/hash.sh -p $tmpPASSWORD"`
-echo $tmpPASSWORD
-echo $tmpHash
+git clone https://github.com/flavienbwk/opensearch-docker-compose.git
+cp docker-compose.yml ./opensearch-docker-compose
+pwd # copy path to clipboard, relative mounts don't work, Ohhh I can use sed
+vim ./opensearch-docker-compose/docker-compose.yml # Change the mount location for the users
+docker-compose up
+```
+
+``` bash
+# using sed
+mah_path=$(pwd)
+sed -i 's/mag_path/$pwd/g' ./opensearch-docker-compose/docker-compose.yml
+
+```
+## Opensearch generate password tries
+
+``` bash
+docker run -p 9200:9200 -p 9600:9600 --name ospass -e "discovery.type=single-node" opensearchproject/opensearch:1.1.0
+docker exec -it ospass bash
+/usr/share/opensearch/plugins/opensearch-security/tools/hash.sh -p mahPassword
+docker stop ospass
+docker rm ospass
 ```
 
 ## Enable HTTP

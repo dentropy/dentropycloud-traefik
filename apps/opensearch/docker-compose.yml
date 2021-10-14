@@ -26,7 +26,7 @@ services:
       - "./opensearch.yml:/usr/share/opensearch/config/opensearch.yml"
       - "os-data1:/usr/share/opensearch/data"
       - "./certs:/usr/share/opensearch/config/certificates:ro"
-      - /home/paul/Projects/ddaemon/dentropycloud-traefik/apps/opensearch/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
+      - mah_path/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
     ports:
       - 9200:9200
       - 9600:9600 # required for Performance Analyzer
@@ -55,7 +55,7 @@ services:
       - "./opensearch.yml:/usr/share/opensearch/config/opensearch.yml"
       - "os-data2:/usr/share/opensearch/data"
       - "./certs:/usr/share/opensearch/config/certificates:ro"
-      - /home/paul/Projects/ddaemon/dentropycloud-traefik/apps/opensearch/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
+      - mah_path/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
   
   os03:
     restart: always
@@ -81,7 +81,7 @@ services:
       - "./opensearch.yml:/usr/share/opensearch/config/opensearch.yml"
       - "os-data3:/usr/share/opensearch/data"
       - "./certs:/usr/share/opensearch/config/certificates:ro"
-      - /home/paul/Projects/ddaemon/dentropycloud-traefik/apps/opensearch/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
+      - mah_path/opensearch-config/internal_user.yml:/usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
 
       
   
