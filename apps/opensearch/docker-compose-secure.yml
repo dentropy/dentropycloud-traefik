@@ -24,6 +24,16 @@ services:
       - 9600:9600 # required for Performance Analyzer
     networks:
       - opensearch-net
+      - traefik-homelab
+    labels:
+        - "traefik.enable=true"
+        - 'traefik.http.routers.opensearch-node1.entrypoints=https'
+        - "traefik.http.routers.opensearch-node1.rule=Host(`opensearch.${MY_DOMAIN}`)"
+        - "traefik.http.routers.opensearch-node1.tls.certresolver=myresolver"
+        - "traefik.http.routers.opensearch-node1.service=opensearch-node1@docker"
+        - "traefik.http.services.opensearch-node1.loadbalancer.server.port=9200"
+        - "traefik.http.routers.opensearch-node1.tls.options=default"
+        - "traefik.docker.network=traefik-homelab"
   opensearch-node2:
     image: opensearchproject/opensearch:1.1.0
     container_name: opensearch-node2
@@ -45,16 +55,6 @@ services:
       - opensearch-data2:/usr/share/opensearch/data
     networks:
       - opensearch-net
-      - traefik-homelab
-    labels:
-        - "traefik.enable=true"
-        - 'traefik.http.routers.opensearch-node1.entrypoints=https'
-        - "traefik.http.routers.opensearch-node1.rule=Host(`opensearch.${MY_DOMAIN}`)"
-        - "traefik.http.routers.opensearch-node1.tls.certresolver=myresolver"
-        - "traefik.http.routers.opensearch-node1.service=opensearch-node1@docker"
-        - "traefik.http.services.opensearch-node1.loadbalancer.server.port=9200"
-        - "traefik.http.routers.opensearch-node1.tls.options=default"
-        - "traefik.docker.network=traefik-homelab"
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:1.1.0
     container_name: opensearch-dashboards
