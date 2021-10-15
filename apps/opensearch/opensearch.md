@@ -20,18 +20,33 @@ docker-compose exec os01 bash -c "chmod +x plugins/opensearch-security/tools/sec
 ## Setup
 
 ``` bash
-git clone https://github.com/flavienbwk/opensearch-docker-compose.git
-cp docker-compose.yml ./opensearch-docker-compose
-pwd # copy path to clipboard, relative mounts don't work, Ohhh I can use sed
-vim ./opensearch-docker-compose/docker-compose.yml # Change the mount location for the users
-docker-compose up
-```
-
-``` bash
+sudo sysctl -w vm.max_map_count=512000
 # using sed
 # cd  into apps/opensearch
 mah_path=$(pwd)
-sed -i -E "s|mah_path|$mah_path|g" ./docker-compose.yml
+cp docker-compose.yml opensearch-docker-compose
+sed -i -E "s|mah_path|$mah_path|g" ./opensearch-docker-compose/docker-compose.yml
+sed -i -E "s|mah_path|$mah_path|g" ./docker-compose-insecure.yml
+sed -i -E "s|mah_path|$mah_path|g" ./docker-compose-secure.yml
+cat ./opensearch-docker-compose/docker-compose.yml
+```
+
+``` bash
+# the git cloned one
+cd opensearch-docker-compose
+bash ./generate-certs.sh
+docker-compose up -d
+docker-compose logs --follow
+# Wait about 30 seconds
+# press `q` to exit
+docker-compose exec os01 bash -c "chmod +x plugins/opensearch-security/tools/securityadmin.sh && bash plugins/opensearch-security/tools/securityadmin.sh -cd plugins/opensearch-security/securityconfig -icl -nhnv -cacert config/certificates/ca/ca.pem -cert config/certificates/ca/admin.pem -key config/certificates/ca/admin.key -h localhost"
+```
+
+``` bash
+# insecure
+docker-compose -f docker-compose-insecure.yml up
+# secure
+docker-compose -f docker-compose-secure.yml ../../../.env up
 ```
 
 ## Opensearch generate password tries
