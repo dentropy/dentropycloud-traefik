@@ -29,10 +29,11 @@ docker-compose up
 
 ``` bash
 # using sed
+# cd  into apps/opensearch
 mah_path=$(pwd)
-sed -i 's/mag_path/$pwd/g' ./opensearch-docker-compose/docker-compose.yml
-
+sed -i -E "s|mah_path|$mah_path|g" ./docker-compose.yml
 ```
+
 ## Opensearch generate password tries
 
 ``` bash
