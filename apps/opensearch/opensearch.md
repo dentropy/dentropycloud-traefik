@@ -5,7 +5,7 @@
 * [YAML files - OpenSearch documentation](https://opensearch.org/docs/latest/security-plugin/configuration/yaml/#opensearchyml)
 * [API - OpenSearch documentation](https://opensearch.org/docs/latest/security-plugin/access-control/api/#users)
 * [YAML files - OpenSearch documentation](https://opensearch.org/docs/latest/security-plugin/configuration/yaml#internal_usersyml)
-
+* [API - Change Password](https://opensearch.org/docs/latest/security-plugin/access-control/api/#change-password)
 ``` bash
 docker-compose -f docker-compose-insecure.yml down
 ./DELETE.sh
@@ -44,9 +44,11 @@ docker-compose exec os01 bash -c "chmod +x plugins/opensearch-security/tools/sec
 
 ``` bash
 # insecure
-docker-compose -f docker-compose-insecure.yml up
+docker-compose -f docker-compose-insecure.yml up -d
+docker-compose -f docker-compose-insecure.yml logs --follow # press `q` to quit
 # secure
-docker-compose -f docker-compose-secure.yml ../../../.env up
+docker-compose -f docker-compose-secure.yml --env-file ../../.env up -d
+docker-compose -f docker-compose-secure.yml logs --follow # press `q` to quit
 ```
 
 ## Opensearch generate password tries
